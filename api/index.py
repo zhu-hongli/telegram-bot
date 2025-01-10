@@ -17,7 +17,7 @@ dispatcher.add_handler(CommandHandler('start', start))
 async def webhook(request: Request):
     json_data = await request.json()
     update = Update.de_json(json_data, bot)
-    dispatcher.process_update(update)
+    dispatcher.process_update(update) 
     return "ok"
 
 @app.get("/")
