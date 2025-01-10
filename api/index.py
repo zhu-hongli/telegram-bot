@@ -16,6 +16,11 @@ application.add_handler(CommandHandler('start', start))
 @app.on_event("startup")
 async def startup():
     await application.initialize()
+    await application.start()
+
+@app.on_event("shutdown")
+async def shutdown():
+    await application.stop()
 
 @app.post("/webhook")
 async def webhook(request: Request):
