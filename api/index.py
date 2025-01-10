@@ -9,7 +9,12 @@ bot = Bot(token=TOKEN)
 application = Application.builder().bot(bot).build()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Hello! This is a webhook demo bot.')
+    # 创建菜单按钮
+    keyboard = [
+        [InlineKeyboardButton("📱 菜单", callback_data='show_menu')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text('Hello! This is a webhook demo bot.', reply_markup=reply_markup)
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 获取用户发送的图片
@@ -31,7 +36,22 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()  # 响应回调查询
     
-    if query.data == 'bikini':
+    if query.data == 'show_menu':
+        # 创建展开的菜单选项
+        keyboard = [
+            [InlineKeyboardButton("💰 充值", callback_data='recharge')],
+            [InlineKeyboardButton("🔍 Test1", callback_data='test1')],
+            [InlineKeyboardButton("🔧 Test2", callback_data='test2')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.message.edit_text("请选择以下选项：", reply_markup=reply_markup)
+    elif query.data == 'recharge':
+        await query.message.reply_text("您选择了充值选项")
+    elif query.data == 'test1':
+        await query.message.reply_text("您选择了Test1选项")
+    elif query.data == 'test2':
+        await query.message.reply_text("您选择了Test2选项")
+    elif query.data == 'bikini':
         await query.message.reply_text("您选择了比基尼选项")
     elif query.data == 'nude':
         await query.message.reply_text("您选择了脱衣选项")
