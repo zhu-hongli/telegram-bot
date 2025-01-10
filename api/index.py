@@ -16,7 +16,7 @@ application.add_handler(CommandHandler('start', start))
 @app.on_event("startup")
 async def startup():
     await application.initialize()
-    await application.start()
+    await application.bot.set_webhook(url="https://telegram-bot-zeta-azure.vercel.app/webhook")
 
 @app.on_event("shutdown")
 async def shutdown():
@@ -27,7 +27,8 @@ async def webhook(request: Request):
     try:
         json_data = await request.json()
         update = Update.de_json(json_data, bot)
-        await application.process_update(update)
+        async with application:
+            await application.process_update(update)
         return {"status": "ok"}
     except Exception as e:
         print(f"Error processing update: {str(e)}")
