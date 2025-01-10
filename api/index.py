@@ -13,6 +13,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 application.add_handler(CommandHandler('start', start))
 
+@app.on_event("startup")
+async def startup():
+    await application.initialize()
+
 @app.post("/webhook")
 async def webhook(request: Request):
     json_data = await request.json()
