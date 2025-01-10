@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
-from telegram import Update, Bot
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram import Update, Bot, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 
 app = FastAPI()
 
@@ -14,11 +14,31 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 获取用户发送的图片
     photo = update.message.photo[-1]  # 获取最高质量的图片版本
-    # 直接将相同的图片发送回去
-    await update.message.reply_photo(photo.file_id)
+    
+    # 创建内联键盘按钮
+    keyboard = [
+        [
+            InlineKeyboardButton("比基尼", callback_data='bikini'),
+            InlineKeyboardButton("脱衣", callback_data='nude')
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    # 发送图片和按钮
+    await update.message.reply_photo(photo.file_id, reply_markup=reply_markup)
+
+async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()  # 响应回调查询
+    
+    if query.data == 'bikini':
+        await query.message.reply_text("您选择了比基尼选项")
+    elif query.data == 'nude':
+        await query.message.reply_text("您选择了脱衣选项")
 
 application.add_handler(CommandHandler('start', start))
 application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
+application.add_handler(CallbackQueryHandler(button_callback))
 
 @app.on_event("startup")
 async def startup():
