@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
-from telegram import Update, Bot
-from telegram.ext import Dispatcher, CommandHandler
+# from telegram import Update, Bot
+# from telegram.ext import Dispatcher, CommandHandler
 
 app = FastAPI()
 
