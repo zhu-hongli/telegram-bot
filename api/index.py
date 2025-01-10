@@ -1,23 +1,23 @@
 from fastapi import FastAPI, Request
 from telegram import Update, Bot
-from telegram.ext import Dispatcher, CommandHandler
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 app = FastAPI()
 
 TOKEN = '7015054463:AAHRjapJy3Rkbz3JTC_IjsjhklrzO1XBhb0'
 bot = Bot(token=TOKEN)
-dispatcher = Dispatcher(bot, None, workers=0)
+application = Application.builder().bot(bot).build()
 
-def start(update, context):
-    update.message.reply_text('Hello! This is a webhook demo bot.')
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('Hello! This is a webhook demo bot.')
 
-dispatcher.add_handler(CommandHandler('start', start))
+application.add_handler(CommandHandler('start', start))
 
 @app.post("/webhook")
 async def webhook(request: Request):
     json_data = await request.json()
     update = Update.de_json(json_data, bot)
-    dispatcher.process_update(update) 
+    await application.process_update(update)
     return "ok"
 
 @app.get("/")
