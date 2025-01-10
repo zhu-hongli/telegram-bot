@@ -1,27 +1,20 @@
-from telegram.ext import Application, MessageHandler, CommandHandler, filters
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 from config import TELEGRAM_BOT_TOKEN
 
-async def reply(update, context):
-    print(context)
-    await update.message.reply_text("Hello there!")
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
-async def hello(update, context):
-    print(context)
-    await update.message.reply_text("你好!")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
 
-def main():
-    """
-    Handles the initial launch of the program (entry point).
-    """
-    token = TELEGRAM_BOT_TOKEN
-    application = Application.builder().token(token).concurrent_updates(True).read_timeout(30).write_timeout(30).build()
-    application.add_handler(MessageHandler(filters.TEXT, reply))
-    application.add_handler(CommandHandler("hello", hello))
-    application.add_handler(MessageHandler(filters.PHOTO, reply))
-    print("Telegram Bot started!", flush=True)
+if __name__ == '__main__':
+    application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+    
+    start_handler = CommandHandler('start', start)
+    application.add_handler(start_handler)
+    
     application.run_polling()
-
-
-if __name__ == "__main__":
-    main()
-
