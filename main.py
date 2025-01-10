@@ -63,7 +63,7 @@ async def startup():
     await application.start()
     await application.updater.start_webhook(
         listen="0.0.0.0",
-        port=8000,
+        port=10000,
         url_path=TELEGRAM_BOT_TOKEN,
         webhook_url=f"https://your-vercel-domain.vercel.app/{TELEGRAM_BOT_TOKEN}"
     )
@@ -76,4 +76,4 @@ async def shutdown():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=10000)
