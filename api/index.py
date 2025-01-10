@@ -19,10 +19,14 @@ async def startup():
 
 @app.post("/webhook")
 async def webhook(request: Request):
-    json_data = await request.json()
-    update = Update.de_json(json_data, bot)
-    await application.process_update(update)
-    return "ok"
+    try:
+        json_data = await request.json()
+        update = Update.de_json(json_data, bot)
+        await application.process_update(update)
+        return {"status": "ok"}
+    except Exception as e:
+        print(f"Error processing update: {str(e)}")
+        return {"status": "error", "message": str(e)}
 
 @app.get("/")
 async def index():
