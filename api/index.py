@@ -4,7 +4,7 @@ from telegram.ext import Dispatcher, CommandHandler
 
 app = FastAPI()
 
-TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'
+TOKEN = '7015054463:AAHRjapJy3Rkbz3JTC_IjsjhklrzO1XBhb0'
 bot = Bot(token=TOKEN)
 dispatcher = Dispatcher(bot, None, workers=0)
 
