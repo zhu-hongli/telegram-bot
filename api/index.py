@@ -23,3 +23,4 @@ async def webhook(request: Request):
 @app.get("/")
 async def index():
     return {"message": "Hello, this is the Telegram bot webhook!"}
+
