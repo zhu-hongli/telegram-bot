@@ -12,7 +12,7 @@ application = Application.builder().bot(bot).build()
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 创建一个自定义的“菜单”按钮，放置在聊天框下方
     keyboard = [
-        [KeyboardButton("📱 菜单")]  # 这个按钮将出现在聊天框下方
+        [KeyboardButton("📱 菜单"), InlineKeyboardButton("test")]  # 这个按钮将出现在聊天框下方
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  # resize_keyboard=True，按钮大小自适应
     await update.message.reply_text('''⭐️ 本机器人的使用条款和免责声明
