@@ -15,7 +15,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [KeyboardButton("📱 菜单")]  # 这个按钮将出现在聊天框下方
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  # resize_keyboard=True，按钮大小自适应
-    await update.message.reply_text('Hello! This is a webhook demo bot. 点击“菜单”按钮展开更多操作选项。',
+    await update.message.reply_text('''⭐️ 本机器人的使用条款和免责声明
+
+➡️ 本机器人是一个根据用户输入生成图像的机器人。
+
+➡️ 但是，该机器人不对用户使用它创建的任何特定图像负责。
+
+➡️ 使用应该由用户自行全面认识和负责。
+
+➡️ 用户在利用此机器人时必须对内容和行为承担全部责任。
+
+➡️ 本机器人仅是一个工具，无法控制或对用户的使用方式负责。
+
+⭐️ 禁止用户使用机器人传播可能对个人或组织造成伤害的图像。
+
+⭐️ 不会存储用户提交的任何信息或图像，除了TelegramID，也没有权利将用户信息用于任何目的。''',
                                     reply_markup=reply_markup)
 
 # 处理收到的图片
