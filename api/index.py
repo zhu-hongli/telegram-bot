@@ -34,16 +34,18 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    await query.answer()  # 响应回调查询
+    await query.answer()
     
     if query.data == 'show_menu':
         # 创建展开的菜单选项
         keyboard = [
-            [InlineKeyboardButton("💰 充值", callback_data='recharge')],
-            [InlineKeyboardButton("🔍 Test1", callback_data='test1')],
-            [InlineKeyboardButton("🔧 Test2", callback_data='test2')]
+            [InlineKeyboardButton("🤖 启动机器人", callback_data='start')],
+            [InlineKeyboardButton("⭐ 充值成为vip", callback_data='payment')],
+            [InlineKeyboardButton("🎄 查询当前排队人数", callback_data='ck')],
+            [InlineKeyboardButton("📖 禁止保存的频道/群组帖子", callback_data='zc')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
+        # 编辑原消息以显示新的菜单
         await query.message.edit_text("请选择以下选项：", reply_markup=reply_markup)
     elif query.data == 'recharge':
         await query.message.reply_text("您选择了充值选项")
