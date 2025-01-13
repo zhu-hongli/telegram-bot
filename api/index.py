@@ -66,6 +66,11 @@ application.add_handler(CallbackQueryHandler(button_callback))
 async def startup():
     await application.initialize()
     await application.bot.set_webhook(url="https://telegram-bot-zeta-azure.vercel.app/webhook")
+    keyboard = [
+        [InlineKeyboardButton("📱 菜单", callback_data='show_menu')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await application.bot.reply_text('Hello! This is a webhook demo bot.', reply_markup=reply_markup)
 
 @app.on_event("shutdown")
 async def shutdown():
