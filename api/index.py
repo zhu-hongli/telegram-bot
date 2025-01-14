@@ -10,7 +10,7 @@ application = Application.builder().bot(bot).build()
 
 # 启动时显示菜单按钮
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # 创建一个自定义的“菜单”按钮，放置在聊天框下方
+    # 创建一个自定义的"菜单"按钮，放置在聊天框下方
     keyboard = [
         [
             KeyboardButton("💰 购买积分"),
@@ -98,9 +98,36 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == 'nude':
         await query.message.reply_text("您选择了脱衣选项")
 
+# 处理文本消息
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message.text == "👤 个人资料":
+        profile_message = """
+<b>👤 用户个人资料</b>
+
+<i>基本信息：</i>
+🆔 用户ID：<code>{}</code>
+👤 用户名：<code>{}</code>
+📅 注册日期：2024-03-20
+
+<i>账户状态：</i>
+💰 剩余积分：500
+⭐️ 会员等级：普通用户
+🎯 使用次数：27次
+
+<i>其他信息：</i>
+🔥 连续使用天数：3天
+🏆 特殊成就：新手上路
+""".format(update.effective_user.id, update.effective_user.username or "未设置用户名")
+
+        await update.message.reply_text(
+            profile_message,
+            parse_mode='HTML'
+        )
+
 # 绑定处理程序
 application.add_handler(CommandHandler('start', start))
 application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
+application.add_handler(MessageHandler(filters.TEXT, handle_message))
 application.add_handler(CallbackQueryHandler(button_callback))
 
 @app.on_event("startup")
