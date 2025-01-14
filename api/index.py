@@ -12,25 +12,43 @@ application = Application.builder().bot(bot).build()
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 创建一个自定义的“菜单”按钮，放置在聊天框下方
     keyboard = [
-        [KeyboardButton("📱 菜单"), InlineKeyboardButton("test")]  # 这个按钮将出现在聊天框下方
+        [
+            KeyboardButton("💰 购买积分"),
+            KeyboardButton("👤 个人资料"),
+            KeyboardButton("⚙️ 偏好设定")
+        ],
+        [
+            KeyboardButton("💡 提示"),
+            KeyboardButton("📢 官方样本频道"),
+            KeyboardButton("🔗 分享")
+        ]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  # resize_keyboard=True，按钮大小自适应
-    await update.message.reply_text('''⭐️ 本机器人的使用条款和免责声明
+    
+    html_message = """
+<b>⭐️ 本机器人的使用条款和免责声明</b>
 
+<i>基本说明：</i>
 ➡️ 本机器人是一个根据用户输入生成图像的机器人。
 
-➡️ 但是，该机器人不对用户使用它创建的任何特定图像负责。
-
+<i>免责声明：</i>
+<code>➡️ 但是，该机器人不对用户使用它创建的任何特定图像负责。
 ➡️ 使用应该由用户自行全面认识和负责。
-
 ➡️ 用户在利用此机器人时必须对内容和行为承担全部责任。
+➡️ 本机器人仅是一个工具，无法控制或对用户的使用方式负责。</code>
 
-➡️ 本机器人仅是一个工具，无法控制或对用户的使用方式负责。
+<i>重要提醒：</i>
+<b>⭐️ 禁止用户使用机器人传播可能对个人或组织造成伤害的图像。</b>
 
-⭐️ 禁止用户使用机器人传播可能对个人或组织造成伤害的图像。
-
-⭐️ 不会存储用户提交的任何信息或图像，除了TelegramID，也没有权利将用户信息用于任何目的。''',
-                                    reply_markup=reply_markup)
+<i>隐私声明：</i>
+<code>⭐️ 不会存储用户提交的任何信息或图像，除了TelegramID，也没有权利将用户信息用于任何目的。</code>
+"""
+    
+    await update.message.reply_text(
+        html_message,
+        reply_markup=reply_markup,
+        parse_mode='HTML'  # 启用 HTML 解析模式
+    )
 
 # 处理收到的图片
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
