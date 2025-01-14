@@ -53,7 +53,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # 处理收到的图片
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 获取用户发送的图片
-    photo = update.message.photo[-1]  # 获取最高质量的图片版本
+    photo = update.message.photo[0]  # 获取缩略图版本
     
     # 创建内联键盘按钮
     keyboard = [
@@ -64,8 +64,32 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # 发送图片和按钮
+    # 创建价目表消息
+    price_message = """
+<b>💰 服务价目表</b>
+
+<i>基础服务：</i>
+🔹 比基尼效果：50积分/张
+🔹 脱衣效果：100积分/张
+
+<i>批量优惠：</i>
+🎁 10张以上：9折
+🎁 50张以上：8折
+🎁 100张以上：7折
+
+<i>会员特权：</i>
+⭐️ VIP用户：全场8.5折
+⭐️ SVIP用户：全场7.5折
+"""
+    
+    # 先发送图片和按钮
     await update.message.reply_photo(photo.file_id, reply_markup=reply_markup)
+    
+    # 再发送价目表
+    await update.message.reply_text(
+        price_message,
+        parse_mode='HTML'  # 启用 HTML 解析模式
+    )
 
 # 处理按钮点击
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
