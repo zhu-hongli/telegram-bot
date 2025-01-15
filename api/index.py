@@ -63,32 +63,8 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # 创建价目表消息
-    price_message = """
-<b>💰 服务价目表</b>
-
-<i>基础服务：</i>
-🔹 比基尼效果：50积分/张
-🔹 脱衣效果：100积分/张
-
-<i>批量优惠：</i>
-🎁 10张以上：9折
-🎁 50张以上：8折
-🎁 100张以上：7折
-
-<i>会员特权：</i>
-⭐️ VIP用户：全场8.5折
-⭐️ SVIP用户：全场7.5折
-"""
-    
     # 发送图片和按钮
     await update.message.reply_photo(photo.file_id, reply_markup=reply_markup)
-    
-    # 再发送价目表
-    await update.message.reply_text(
-        price_message,
-        parse_mode='HTML'  # 启用 HTML 解析模式
-    )
 
 # 处理按钮点击
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -130,9 +106,21 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup = InlineKeyboardMarkup(keyboard)
         await query.message.edit_reply_markup(reply_markup=reply_markup)
     
-    # 处理其他按钮回调
+    # 处理测试按钮回调
     elif query.data in ['test1', 'test2', 'test3', 'test4']:
-        await query.message.reply_text(f"您选择了{query.data}选项")
+        # 这里替换为你想要发送的新图片
+        new_photo_url = "https://m.media-amazon.com/images/I/61X4kXalXtL._AC_SX679_.jpg"  # 替换为实际的图片URL
+        try:
+            # 删除原始消息（包含旧图片和按钮）
+            await query.message.delete()
+            
+            # 发送新图片，不带任何按钮
+            await query.message.reply_photo(
+                photo=new_photo_url,
+                caption=f"这是{query.data}的结果"
+            )
+        except Exception as e:
+            await query.message.reply_text(f"处理图片时出错：{str(e)}")
 
 # 处理文本消息
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
