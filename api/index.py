@@ -52,14 +52,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 处理收到的图片
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # 获取用户发送的图片
-    photo = update.message.photo[0]  # 获取缩略图版本
+    photo = update.message.photo[0]
     
-    # 创建内联键盘按钮
+    # 创建初始内联键盘按钮
     keyboard = [
         [
-            InlineKeyboardButton("比基尼", callback_data='bikini'),
-            InlineKeyboardButton("脱衣", callback_data='nude')
+            InlineKeyboardButton("脱衣", callback_data='nude'),
+            InlineKeyboardButton("换脸", callback_data='face_swap')
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -82,7 +81,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 ⭐️ SVIP用户：全场7.5折
 """
     
-    # 先发送图片和按钮
+    # 发送图片和按钮
     await update.message.reply_photo(photo.file_id, reply_markup=reply_markup)
     
     # 再发送价目表
@@ -96,31 +95,44 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    if query.data == 'show_menu':
-        # 创建展开的菜单选项
+    if query.data == 'nude':
+        # 脱衣选项的子菜单
         keyboard = [
-            [InlineKeyboardButton("🤖 启动机器人", callback_data='start')],
-            [InlineKeyboardButton("⭐ 充值成为vip", callback_data='payment')],
-            [InlineKeyboardButton("🎄 查询当前排队人数", callback_data='ck')],
-            [InlineKeyboardButton("📖 禁止保存的频道/群组帖子", callback_data='zc')]
+            [
+                InlineKeyboardButton("test1", callback_data='test1'),
+                InlineKeyboardButton("test2", callback_data='test2')
+            ],
+            [InlineKeyboardButton("返回", callback_data='back')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        # 编辑原消息以显示新的菜单
-        await query.message.edit_text("请选择以下选项：", reply_markup=reply_markup)
-
-    # 处理其他具体选项点击
-    elif query.data == 'start':
-        await query.message.reply_text("您选择了启动机器人选项")
-    elif query.data == 'payment':
-        await query.message.reply_text("您选择了充值选项")
-    elif query.data == 'ck':
-        await query.message.reply_text("您选择了查询排队人数选项")
-    elif query.data == 'zc':
-        await query.message.reply_text("您选择了禁止保存的频道/群组帖子选项")
-    elif query.data == 'bikini':
-        await query.message.reply_text("您选择了比基尼选项")
-    elif query.data == 'nude':
-        await query.message.reply_text("您选择了脱衣选项")
+        await query.message.edit_reply_markup(reply_markup=reply_markup)
+    
+    elif query.data == 'face_swap':
+        # 换脸选项的子菜单
+        keyboard = [
+            [
+                InlineKeyboardButton("test3", callback_data='test3'),
+                InlineKeyboardButton("test4", callback_data='test4')
+            ],
+            [InlineKeyboardButton("返回", callback_data='back')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.message.edit_reply_markup(reply_markup=reply_markup)
+    
+    elif query.data == 'back':
+        # 返回主菜单
+        keyboard = [
+            [
+                InlineKeyboardButton("脱衣", callback_data='nude'),
+                InlineKeyboardButton("换脸", callback_data='face_swap')
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.message.edit_reply_markup(reply_markup=reply_markup)
+    
+    # 处理其他按钮回调
+    elif query.data in ['test1', 'test2', 'test3', 'test4']:
+        await query.message.reply_text(f"您选择了{query.data}选项")
 
 # 处理文本消息
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
