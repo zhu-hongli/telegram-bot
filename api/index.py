@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from telegram import Update, Bot, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
-
+from message import start_message
 app = FastAPI()
 
 TOKEN = '7015054463:AAHRjapJy3Rkbz3JTC_IjsjhklrzO1XBhb0'
@@ -25,24 +25,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  # resize_keyboard=True，按钮大小自适应
     
-    html_message = """
-<b>⭐️ 本机器人的使用条款和免责声明</b>
-
-<i>基本说明：</i>
-➡️ 本机器人是一个根据用户输入生成图像的机器人。
-
-<i>免责声明：</i>
-<code>➡️ 但是，该机器人不对用户使用它创建的任何特定图像负责。
-➡️ 使用应该由用户自行全面认识和负责。
-➡️ 用户在利用此机器人时必须对内容和行为承担全部责任。
-➡️ 本机器人仅是一个工具，无法控制或对用户的使用方式负责。</code>
-
-<i>重要提醒：</i>
-<b>⭐️ 禁止用户使用机器人传播可能对个人或组织造成伤害的图像。</b>
-
-<i>隐私声明：</i>
-<code>⭐️ 不会存储用户提交的任何信息或图像，除了TelegramID，也没有权利将用户信息用于任何目的。</code>
-"""
+    html_message = start_message
     
     await update.message.reply_text(
         html_message,
@@ -52,7 +35,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 处理收到的图片
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    photo = update.message.photo[0]
+    # 获取最高质量的图片（telegram会发送多个不同尺寸的版本）
+    photo = update.message.photo[-1]  # 使用 -1 获取最大尺寸的图片
+    
+    # 获取图片文件对象
+    file = await context.bot.get_file(photo.file_id)
+    # 获取图片链接
+    photo_url = file.file_path
     
     # 创建初始内联键盘按钮
     keyboard = [
@@ -63,8 +52,13 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # 发送图片和按钮
-    await update.message.reply_photo(photo.file_id, reply_markup=reply_markup)
+    # 发送图片和按钮，同时打印图片链接
+    await update.message.reply_photo(
+        photo.file_id, 
+        reply_markup=reply_markup,
+        caption=f"图片链接: {photo_url}"
+    )
+
 
 # 处理按钮点击
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
