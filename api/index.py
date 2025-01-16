@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from telegram import Update, Bot, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
-from api.message import start_message
+from api.message import start_message, profile_message
 app = FastAPI()
 
 TOKEN = '7015054463:AAHRjapJy3Rkbz3JTC_IjsjhklrzO1XBhb0'
@@ -119,23 +119,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # 处理文本消息
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text == "👤 个人资料":
-        profile_message = """
-<b>👤 用户个人资料</b>
-
-<i>基本信息：</i>
-🆔 用户ID：<code>{}</code>
-👤 用户名：<code>{}</code>
-📅 注册日期：2024-03-20
-
-<i>账户状态：</i>
-💰 剩余积分：500
-⭐️ 会员等级：普通用户
-🎯 使用次数：27次
-
-<i>其他信息：</i>
-🔥 连续使用天数：3天
-🏆 特殊成就：新手上路
-""".format(update.effective_user.id, update.effective_user.username or "未设置用户名")
+        profile_message = profile_message.format(update.effective_user.id, update.effective_user.username or "未设置用户名")
 
         await update.message.reply_text(
             profile_message,
