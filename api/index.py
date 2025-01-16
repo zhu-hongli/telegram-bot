@@ -119,10 +119,13 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # 处理文本消息
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text == "👤 个人资料":
-        profile_message = profile_message.format(update.effective_user.id, update.effective_user.username or "未设置用户名")
+        formatted_profile = profile_message.format(
+            update.effective_user.id, 
+            update.effective_user.username or "未设置用户名"
+        )
 
         await update.message.reply_text(
-            profile_message,
+            formatted_profile,
             parse_mode='HTML'
         )
 
