@@ -160,11 +160,11 @@ async def webhook(request: Request):
 @app.post("/send_photo")
 async def send_photo(chat_id: str, photo_url: str):
     try:
-        # 使用 bot 发送图片
-        await bot.send_photo(
-            chat_id=chat_id,
-            photo=photo_url
-        )
+        async with bot:  # 添加这个上下文管理器
+            await bot.send_photo(
+                chat_id=chat_id,
+                photo=photo_url
+            )
         return {"status": "success", "message": "Photo sent successfully"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
