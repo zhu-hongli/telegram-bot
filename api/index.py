@@ -25,7 +25,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)  # resize_keyboard=True，按钮大小自适应
     
-    html_message = start_message
+    html_message = start_message.format(update.effective_chat.id)
     
     await update.message.reply_text(
         html_message,
@@ -155,6 +155,18 @@ async def webhook(request: Request):
         return {"status": "ok"}
     except Exception as e:
         print(f"Error processing update: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
+@app.post("/send_photo")
+async def send_photo(chat_id: str, photo_url: str):
+    try:
+        # 使用 bot 发送图片
+        await bot.send_photo(
+            chat_id=chat_id,
+            photo=photo_url
+        )
+        return {"status": "success", "message": "Photo sent successfully"}
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 
 @app.get("/")
