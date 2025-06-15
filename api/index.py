@@ -185,7 +185,7 @@ async def send_photo_with_url(chat_id: str, photo_url: str):
             # 获取文件URL
             file_url = file_info.file_path
             # 构建完整的Telegram文件URL
-            telegram_file_url = f"https://api.telegram.org/file/bot{bot.token}/{file_url}"
+            telegram_file_url = file_url
             
             return {
                 "status": "success", 
