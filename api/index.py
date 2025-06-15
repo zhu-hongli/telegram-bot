@@ -56,7 +56,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_photo(
         photo.file_id, 
         reply_markup=reply_markup,
-        caption=f"图片链接: {photo_url}"
+        caption=f"图片链接: {photo_url}\nChat ID: {update.effective_chat.id}"
     )
 
 
