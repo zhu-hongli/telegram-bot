@@ -157,7 +157,7 @@ async def webhook(request: Request):
         print(f"Error processing update: {str(e)}")
         return {"status": "error", "message": str(e)}
 
-@app.get("/send_photo")
+@app.post("/send_photo")
 async def send_photo(chat_id: str, photo_url: str):
     try:
         async with bot:  # 添加这个上下文管理器
@@ -169,7 +169,7 @@ async def send_photo(chat_id: str, photo_url: str):
     except Exception as e:
         return {"status": "error", "message": str(e)}
     
-@app.post("/send_photo_with_url")
+@app.get("/send_photo_with_url")
 async def send_photo_with_url(chat_id: str, photo_url: str):
     try:
         async with bot:
