@@ -168,7 +168,36 @@ async def send_photo(chat_id: str, photo_url: str):
         return {"status": "success", "message": "Photo sent successfully"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
+@app.post("/send_photo_with_url")
+async def send_photo_with_url(chat_id: str, photo_url: str):
+    try:
+        async with bot:
+            # 发送图片到对话
+            message = await bot.send_photo(
+                chat_id=chat_id,
+                photo=photo_url
+            )
+            # 获取发送的图片文件ID
+            file_id = message.photo[-1].file_id
+            # 获取文件信息
+            file_info = await bot.get_file(file_id)
+            # 获取文件URL
+            file_url = file_info.file_path
+            # 构建完整的Telegram文件URL
+            telegram_file_url = f"https://api.telegram.org/file/bot{bot.token}/{file_url}"
+            
+            return {
+                "status": "success", 
+                "message": "Photo sent successfully",
+                "file_url": telegram_file_url
+            }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 
 @app.get("/")
 async def index():
     return {"message": "Hello, this is the Telegram bot webhook!"}
+
+
