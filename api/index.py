@@ -4,7 +4,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 from api.message import start_message, profile_message
 app = FastAPI()
 
-TOKEN = '7015054463:AAHRjapJy3Rkbz3JTC_IjsjhklrzO1XBhb0'
+TOKEN = '8134329878:AAF-iYg-GOeUXWwIV2pOGbMu-AiKn5j_nBY'
 bot = Bot(token=TOKEN)
 application = Application.builder().bot(bot).build()
 
